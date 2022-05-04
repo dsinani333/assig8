@@ -134,6 +134,8 @@ function Fetcher(props) {
                 </React.Fragment>)}
                 </Paper>
               </Grid>
+              <p><strong>Collaborative Summary:</strong> Daniel worked on the doSomething() function and deploying on Heroku. 
+              Arian and Eric worked on the web page writings and styling. We all worked on the output logic.</p>
         </Grid>
     );
 }
