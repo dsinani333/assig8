@@ -21,8 +21,8 @@ function Fetcher(props) {
     //const [clicks, setClicks] = useState(0);
     const [response, setResponse] = useState(null);
     const [inputValue, setInputValue] = useState("");
-    const [killme, setkillme] = useState(0);
-    const body = `Hi=${killme}&value=${value}`;
+    const [final, setfinal] = useState("");
+    const body = `Characteristics and their blocks=${final}`;
 
     const  fetchData= useCallback(async()=>{
       const res = await fetch(url,
@@ -71,22 +71,27 @@ function Fetcher(props) {
       numBlocks = values.slice(1);
 
       //Characs[0] = new characteristic("D", 1);
-      setkillme(Characs[0].getName());
-
+      
       var i;
       for (i=0; i<numCharacteristics; i++) {
         C = new characteristic(charName, parseInt(numBlocks[i]));
         Characs[i] = C;
         //break;
-        charName++;
+        charName = String.fromCharCode(charName.charCodeAt(0) + 1);;
       }
 
+      var result = [];
       for (var j=0; j<numCharacteristics; j++) {
-         console.log("Characteristic " + (Characs[j]).getName() + ": ");
-         console.log((Characs[j]).getBlocks());
+        //result = Characs[j].getName() + ": ";
+        //result = "Characteristic " + Characs[j].getName() + ": ";
+        result[j] = Characs[j].getBlocks();
       }
 
+      //setfinal(Characs[0].toString());
+      //setfinal(charName);
+      setfinal(result);
     }
+
     const handleChange = (event) => {
       setInputValue(event.target.value);
     };
