@@ -3,7 +3,7 @@ import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
+//import Typography from '@material-ui/core/Typography';
 import Skeleton from '@material-ui/core/Skeleton';
 
 const publicURL = 'https://swe432tomcat.herokuapp.com';
@@ -18,10 +18,11 @@ const servicePath ='/echo';
 
 function Fetcher(props) {
     const { url, value} = props;
-    const [clicks, setClicks] = useState(0);
+    //const [clicks, setClicks] = useState(0);
     const [response, setResponse] = useState(null);
     const [inputValue, setInputValue] = useState("");
-    const body = `input=${inputValue}&value=${value}`;
+    const [killme, setkillme] = useState(0);
+    const body = `Hi=${killme}&value=${value}`;
 
     const  fetchData= useCallback(async()=>{
       const res = await fetch(url,
@@ -51,29 +52,65 @@ function Fetcher(props) {
     }, [fetchData]);
 
     const doSomething = function (event) {
-        console.log(event.currentTarget.getAttribute('data-something'));
-        setClicks(clicks + 1);
+      console.log(event.currentTarget.getAttribute('data-something'));
+        
+      //setnumCharacteristics(inputValue);
+      var tempInput = inputValue;
+      var values = [];
+      values = tempInput.split(" ");
+      
+      var numCharacteristics = 1;
+      numCharacteristics = parseInt(values[0]);
+      
+      var charName = 'A';
+      var numBlocks = [];
+      var Characs = [];
+      var C;
+      //var temp = "";
+
+      numBlocks = values.slice(1);
+
+      //Characs[0] = new characteristic("D", 1);
+      setkillme(Characs[0].getName());
+
+      var i;
+      for (i=0; i<numCharacteristics; i++) {
+        C = new characteristic(charName, parseInt(numBlocks[i]));
+        Characs[i] = C;
+        //break;
+        charName++;
+      }
+
+      for (var j=0; j<numCharacteristics; j++) {
+         console.log("Characteristic " + (Characs[j]).getName() + ": ");
+         console.log((Characs[j]).getBlocks());
+      }
+
     }
     const handleChange = (event) => {
       setInputValue(event.target.value);
     };
 
-
     return (
         <Grid
         container
-        direction="row"
+        direction="column"
         justify="center"
         alignItems="center"
-        spacing={2}
+        spacing={3}
         >
           <Grid item xs>
-            <Typography variant="h6">submits: {clicks}</Typography>
+          <h1><center>SWE 432 Assigment 8</center></h1>
+          <h2><center>Daniel Sinani, Eric Schumacher, Arian Filipour</center></h2>
+          <p><center>Instructions:</center> </p>
+          <p>Chose the number of characteristics N, then provide the number of blocks in each characteristic.</p>
+          <p>Please enter small integers for the numbers in the format: "N x0 x1 x2 ... xN".</p>
+          <p>Example list of numbers if intial number is 4: "4 1 2 5 2".</p>
           </Grid>
             <Grid item xs>
               <TextField
-              label="Type something"
-              helperText="This will be echo echo by the server"
+              label="Enter number list"
+              //helperText="This will be echo echo by the server "
               value={inputValue} onChange={handleChange} />
             </Grid>
             <Grid item xs>
@@ -81,8 +118,8 @@ function Fetcher(props) {
                   submit</Button>
             </Grid>
             <Grid item xs>
-              <Paper elevation={1} style={
-                {height:200, width:200, wordBreak: "break-all", padding:4}
+              <Paper elevation={3} style={
+                {height:200, width:500, wordBreak: "break-all", padding:4}
               } >
                 {response?JSON.stringify(response):
                 (<React.Fragment>
@@ -93,10 +130,57 @@ function Fetcher(props) {
                 </Paper>
               </Grid>
         </Grid>
-
     );
 }
 
+class characteristic{
+  #name = "A";
+  #numBlocks = 2;
+
+  constructor(n,b)
+  {
+    this.#name = n;
+    this.#numBlocks = b;
+  }
+
+  getName(){
+    return this.#name;
+  }
+
+  setName (n)
+  {
+    this.#name = n;
+  }
+
+  getNumBlocks ()
+  {
+    return this.#numBlocks;
+  }
+
+  setNumBlocks (b)
+  {
+    this.#numBlocks = b;
+  }
+
+  toString()
+  {
+    return ("[" + this.#name + ", " + this.#numBlocks + "]");
+  }
+
+  getBlocks()
+  {
+    var returnVal = "[ ";
+    for (var j=0; j<this.#numBlocks; j++)
+    {
+      returnVal += this.#name + (j+1);
+      if (j<this.#numBlocks-1)
+        returnVal += ",";
+      returnVal += " ";
+    }
+    returnVal += "]";
+    return returnVal;
+  }
+}
 
 export default function FetcherControlled(props) {
   const url = `${getLocationUrlData().url}${servicePath}`;

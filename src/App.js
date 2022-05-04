@@ -53,7 +53,7 @@ export default function App(props) {
 
   const {rootSX, tabsSX} = useMemo(
     ()=>({
-      rootSX:{ flexGrow: 1 },
+      rootSX:{ flexGrow: 1, bgcolor: "#ffe6cc", color: "#004d99" },
       tabsSX: { borderBottom: 1, borderColor: 'divider' }
     }),
     []
@@ -71,8 +71,8 @@ export default function App(props) {
     <Box sx={rootSX}>
       <AppBar position="static">
         <Toolbar>
-          <Typography variant="h6" component="div" noWrap >
-              SWE 432 React examples
+          <Typography color= "#ffe6cc" variant="h7" component="div" noWrap >
+              SWE 432 Assignment 8
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
           <IconButton
@@ -86,16 +86,13 @@ export default function App(props) {
       </AppBar>
       <Box sx={tabsSX}>
         <Tabs value={currentTab} onChange={handleChangeCurrentTab}>
-          <Tab label="Popcorn Sales" />
-          <Tab label="Fetcher" />
-          <Tab label="Hooks" />
-          <Tab label="Toggle Buttons" />
+          <Tab label="A8" />
         </Tabs>
       </Box>
-      <TabPanel value={currentTab} index={0}>
+      <TabPanel value={currentTab} index={1}>
         <PopcornSales />
       </TabPanel>
-      <TabPanel value={currentTab} index={1}>
+      <TabPanel value={currentTab} index={0}>
         <Fetcher />
       </TabPanel>
       <TabPanel value={currentTab} index={2}>
