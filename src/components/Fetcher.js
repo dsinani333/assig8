@@ -6,6 +6,8 @@ import TextField from '@material-ui/core/TextField';
 //import Typography from '@material-ui/core/Typography';
 import Skeleton from '@material-ui/core/Skeleton';
 
+//Daniel Sinani
+
 const publicURL = 'https://swe432tomcat.herokuapp.com';
 const getLocationUrlData = () => {
   return {
@@ -104,13 +106,6 @@ function Fetcher(props) {
       }
 
       weekday = Math.abs((d + Math.abs(Math.trunc((2.6*m)-0.2)) - (2*c) + y + Math.abs(Math.trunc(y/4)) + Math.abs(Math.trunc(c/4)))%7);
-      // weekday = d;
-      // weekday = weekday + Math.abs(Math.trunc(((13*m)-1)/5));
-      // weekday = weekday + y;
-      // weekday = weekday + Math.trunc(y/4);
-      // weekday = weekday + Math.trunc(c/4);
-      // weekday = weekday - Math.trunc(2*c);
-      // weekday = Math.abs(Math.trunc(weekday % 7));
       
       //week of the year
       var temp1 = 0;
