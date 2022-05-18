@@ -123,6 +123,7 @@ function Fetcher(props) {
       var t2 = 30 -parseInt(dateValues[1]);
       t1 = t1 + (t2);
       
+      //printing stuff
       setfinal(resultDate);
       setfyear(t1);
       setfweek(days[Math.floor(weekday)]);
