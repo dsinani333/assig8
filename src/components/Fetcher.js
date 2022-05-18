@@ -18,11 +18,14 @@ const servicePath ='/echo';
 
 function Fetcher(props) {
     const { url, value} = props;
-    //const [clicks, setClicks] = useState(0);
     const [response, setResponse] = useState(null);
     const [inputValue, setInputValue] = useState("");
+    //const [inputValue1, setInputValue1] = useState("");
     const [final, setfinal] = useState("");
-    const body = `Characteristics and their blocks=${final}`;
+    const [fweek, setfweek] = useState("");
+    const [fyear, setfyear] = useState("");
+    const [fwy, setfwy] = useState("");
+    const body = `Date with new format=${final},  Day of the year: ${fyear},  Day of the week: ${fweek},  Week of the year: ${fwy}, `;
 
     const  fetchData= useCallback(async()=>{
       const res = await fetch(url,
@@ -51,46 +54,87 @@ function Fetcher(props) {
       fetchData().catch(e=>{console.log(e)});
     }, [fetchData]);
 
-    const doSomething = function (event) {
+    const doCalculations = function (event) {
       console.log(event.currentTarget.getAttribute('data-something'));
-        
-      //setnumCharacteristics(inputValue);
+      
+      var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+      var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
       var tempInput = inputValue;
       var values = [];
+      var dateValues = [];
       values = tempInput.split(" ");
-      
-      var numCharacteristics = 1;
-      numCharacteristics = parseInt(values[0]);
-      
-      var charName = 'A';
-      var numBlocks = [];
-      var Characs = [];
-      var C;
-      //var temp = "";
+      dateValues = values[0].split("/");
 
-      numBlocks = values.slice(1);
-
-      //Characs[0] = new characteristic("D", 1);
+      var resultDate;
       
-      var i;
-      for (i=0; i<numCharacteristics; i++) {
-        C = new characteristic(charName, parseInt(numBlocks[i]));
-        Characs[i] = C;
-        //break;
-        charName = String.fromCharCode(charName.charCodeAt(0) + 1);;
+      //converting date to proper format
+      if (values[1] == "1"){
+        resultDate = months[parseInt(dateValues[0])-1]+ " " + String(parseInt(dateValues[1])) +" "+ dateValues[2];
+
+      } else if(values[1] == "2"){
+        resultDate = String(parseInt(dateValues[1])) + " " + months[parseInt(dateValues[0])-1] +" "+ dateValues[2];
+
+      } else if(values[1] == "3"){
+        resultDate = String(parseInt(dateValues[1])) + "/" + dateValues[0] +"/"+ dateValues[2];
+
+      } else if(values[1] == "4"){
+        resultDate = dateValues[1] + "-" + months[parseInt(dateValues[0])-1] +"-"+ dateValues[2];
+
+      } else {
+        resultDate = String(parseInt(dateValues[1])) + "-" + months[parseInt(dateValues[0])-1];
       }
 
-      var result = [];
-      for (var j=0; j<numCharacteristics; j++) {
-        //result = Characs[j].getName() + ": ";
-        //result = "Characteristic " + Characs[j].getName() + ": ";
-        result[j] = Characs[j].getBlocks();
+      //day of the week
+      var d,m,c,y,weekday;
+
+      d = parseInt(dateValues[1]);
+      
+      c = parseInt(dateValues[2].slice(0,2));
+
+      y = parseInt(dateValues[2].slice(2));
+
+      if(parseInt(dateValues[0]) == 1){
+        m = 11;
+        y--;
+      } else if(parseInt(dateValues[0]) == 2){
+        m = 12;
+        y--;
+      } else {
+        m = parseInt(dateValues[0]) - 2;
       }
 
-      //setfinal(Characs[0].toString());
-      //setfinal(charName);
-      setfinal(result);
+      weekday = Math.abs((d + Math.abs(Math.trunc((2.6*m)-0.2)) - (2*c) + y + Math.abs(Math.trunc(y/4)) + Math.abs(Math.trunc(c/4)))%7);
+      // weekday = d;
+      // weekday = weekday + Math.abs(Math.trunc(((13*m)-1)/5));
+      // weekday = weekday + y;
+      // weekday = weekday + Math.trunc(y/4);
+      // weekday = weekday + Math.trunc(c/4);
+      // weekday = weekday - Math.trunc(2*c);
+      // weekday = Math.abs(Math.trunc(weekday % 7));
+      
+      //week of the year
+      var temp1 = 0;
+      for (var i=1; i< parseInt(dateValues[0]); i++){
+        temp1 = temp1+ 4.3;
+      }
+      var temp2 = 30 -parseInt(dateValues[1]);
+      temp1 = temp1 + (temp2/7);
+      
+      //day of the year
+      var t1 = 0;
+      for (var i=1; i< parseInt(dateValues[0]); i++){
+        t1 = t1+ 30;
+      }
+      var t2 = 30 -parseInt(dateValues[1]);
+      t1 = t1 + (t2);
+      
+      setfinal(resultDate);
+      setfyear(t1);
+      setfweek(days[Math.floor(weekday)]);
+      setfwy(Math.trunc(temp1));
     }
+
+    //day of year
 
     const handleChange = (event) => {
       setInputValue(event.target.value);
@@ -105,26 +149,29 @@ function Fetcher(props) {
         spacing={3}
         >
           <Grid item xs>
-          <h1><center>SWE 432 Assigment 8</center></h1>
-          <h2><center>Daniel Sinani, Eric Schumacher, Arian Filipour</center></h2>
-          <p><center>Instructions:</center> </p>
-          <p>Chose the number of characteristics N, then provide the number of blocks in each characteristic.</p>
-          <p>Please enter small integers for the numbers in the format: "N x0 x1 x2 ... xN".</p>
-          <p>Example list of numbers if intial number is 4: "4 1 2 5 2".</p>
+          <h1><center>SWE432 Final Exam</center></h1>
+          <h2><center>Daniel Sinani</center></h2>
+          <p><strong>Instructions:</strong> Enter a date and one of the option numbers below with this format: <strong>mm/dd/yyyy x</strong></p>
+          <p><center><font size="3"><strong>1</strong> for "monthname day year"</font></center></p>
+          <p><center><font size="3"><strong>2</strong> for "day monthname year"</font></center></p>
+          <p><center><font size="3"><strong>3</strong> for "dd/mm/yy"</font></center></p>
+          <p><center><font size="3"><strong>4</strong> for "day-monthname-year"</font></center></p>
+          <p><center><font size="3"><strong>5</strong> for "day-monthname"</font></center></p>
+          <p><center><font size="4">Example input: <strong>01/01/2022 3</strong></font></center></p>
           </Grid>
             <Grid item xs>
               <TextField
-              label="Enter number list"
-              //helperText="This will be echo echo by the server "
+              label="mm/dd/yyyy x"
+              helperText="Format"
               value={inputValue} onChange={handleChange} />
             </Grid>
             <Grid item xs>
-              <Button onClick={doSomething} variant="contained" color="primary" data-something="submit">
-                  submit</Button>
+              <Button onClick={doCalculations} variant="contained" color="primary" data-something="submit">
+                  SUBMIT</Button>
             </Grid>
             <Grid item xs>
               <Paper elevation={3} style={
-                {height:200, width:500, wordBreak: "break-all", padding:4}
+                {height:100, width:850, wordBreak: "break-all", padding:4}
               } >
                 {response?JSON.stringify(response):
                 (<React.Fragment>
@@ -134,59 +181,8 @@ function Fetcher(props) {
                 </React.Fragment>)}
                 </Paper>
               </Grid>
-              <p><strong>Collaborative Summary:</strong> Daniel worked on the doSomething() function and deploying on Heroku. 
-              Arian and Eric worked on the web page writings and styling. We all worked on the output logic.</p>
         </Grid>
     );
-}
-
-class characteristic{
-  #name = "A";
-  #numBlocks = 2;
-
-  constructor(n,b)
-  {
-    this.#name = n;
-    this.#numBlocks = b;
-  }
-
-  getName(){
-    return this.#name;
-  }
-
-  setName (n)
-  {
-    this.#name = n;
-  }
-
-  getNumBlocks ()
-  {
-    return this.#numBlocks;
-  }
-
-  setNumBlocks (b)
-  {
-    this.#numBlocks = b;
-  }
-
-  toString()
-  {
-    return ("[" + this.#name + ", " + this.#numBlocks + "]");
-  }
-
-  getBlocks()
-  {
-    var returnVal = "[ ";
-    for (var j=0; j<this.#numBlocks; j++)
-    {
-      returnVal += this.#name + (j+1);
-      if (j<this.#numBlocks-1)
-        returnVal += ",";
-      returnVal += " ";
-    }
-    returnVal += "]";
-    return returnVal;
-  }
 }
 
 export default function FetcherControlled(props) {
